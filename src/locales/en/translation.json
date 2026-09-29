@@ -27,7 +27,8 @@
       "Pillars of performance-driven codebases",
       "Beautiful, modern user interfaces designed to convert",
       "Long-term partnership with proactive consulting"
-    ]
+    ],
+    "button": "Learn More About Us"
   },
   "services": {
     "badge": "Capabilities",
@@ -74,6 +75,7 @@
       "Mobile",
       "Branding"
     ],
+    "allProjects": "All Projects",
     "projects": [
       {
         "id": 1,
@@ -168,5 +170,27 @@
   },
   "contact": {
     "titele":"contact"
+  },
+  "contactPage": {
+  "title": "Let's build something awesome together",
+  "subtitle": "Whether you have a complete project idea or just an initial concept, we are here to turn it into reality. Fill out the form and our team will contact you shortly.",
+  "contactInfo": "Contact Information",
+  "email": "Email Address",
+  "phone": "Phone Number",
+  "address": "Address",
+  "addressValue": "Cairo, Egypt",
+  "form": {
+    "nameLabel": "Full Name",
+    "namePlaceholder": "Hossam AbdElLatif",
+    "phoneLabel": "Phone Number (WhatsApp)",
+    "emailLabel": "Email Address",
+    "serviceLabel": "Project Type You Are Interested In",
+    "serviceDefault": "Select a service...",
+    "serviceOther": "Other Service",
+    "messageLabel": "Project Details",
+    "messagePlaceholder": "Tell us more about your idea, requirements, and any other details to help us understand your project...",
+    "submitBtn": "Send Consultation Request",
+    "successMessage": "Your message has been received successfully! We will contact you soon."
   }
+}
 }

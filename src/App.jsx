@@ -15,6 +15,7 @@ import ProjectDetails from './pages/ProjectDetails';
 import Projects from "./pages/Projects";
 import Blogs from "./pages/Blogs";
 import Bobble from "./components/Bobbles";
+import AboutUsPage from "./pages/AboutUsPage";
 
 
 
@@ -55,6 +56,7 @@ function App() {
             <Route path="/projects" element={<Projects />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/blogs" element={<Blogs />} />
+            <Route path="/about-us" element={<AboutUsPage />} />
           </Routes>
         </main>
 

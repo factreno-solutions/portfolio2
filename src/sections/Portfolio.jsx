@@ -135,7 +135,12 @@ export default function Portfolio() {
             to="/projects"
             className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary-500 px-6 py-3.5 text-body-regular font-semibold text-white transition-all hover:bg-primary-700 hover:scale-[1.02] sm:w-auto"
           >
-            {t("portfolio.allProjects", "معرض المشاريع")}
+            {t("portfolio.allProjects")}
+                                  <ArrowRight
+                        size={16}
+                        className="rtl:-scale-x-100"
+                        aria-hidden="true"
+                      />
           </Link>
         </motion.div>
       </div>

@@ -1,10 +1,9 @@
 import { useTranslation } from "react-i18next";
-import { Check, ArrowRight } from "lucide-react";
+import { Check } from "lucide-react";
 import { motion } from "framer-motion";
 import IllustrationAboutUs from "../assets/Illustration-about.jpg";
-import { Link } from "react-router-dom";
-
-export default function AboutUs() {
+import WeImage from "../assets/we.jpg";
+export default function AboutUsPage() {
   const { t } = useTranslation();
   const points = t("about.points", { returnObjects: true });
 
@@ -32,22 +31,22 @@ export default function AboutUs() {
   };
 
   return (
-    <section id="about" className="w-full px-4 py-16 md:py-24 overflow-hidden">
-      <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-16">
-        {/* Left column */}
+    <>
+      <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-16 w-full">
+        {/* العمود الأول (النصوص) */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.2 }} // خليناها true عشان الأنيميشن يحصل مرة واحدة بس
         >
           <span className="inline-flex items-center rounded-full bg-primary-50 px-4 py-1.5 text-body-small font-semibold text-primary-500">
             {t("about.badge")}
           </span>
 
-          <h2 className="mt-5 max-w-md text-h2 text-primary-900">
+          <h1 className="mt-5 max-w-md text-h2 text-primary-900">
             {t("about.title")}
-          </h2>
+          </h1>
 
           <p className="mt-6 max-w-lg text-body-regular leading-7 text-text-muted">
             {t("about.description1")}
@@ -72,11 +71,11 @@ export default function AboutUs() {
           </ul>
         </motion.div>
 
-        {/* Right column*/}
+        {/* العمود الثاني (الصورة) */}
         <motion.div
           initial={{ opacity: 0, x: 50, scale: 0.95 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mx-auto w-full max-w-120 overflow-hidden rounded-3xl bg-bg-secondary shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
         >
@@ -88,26 +87,13 @@ export default function AboutUs() {
             />
           </div>
         </motion.div>
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.2 }}
-          className="flex justify-center"
-        >
-          <Link
-            to="/about-us"
-            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary-500 px-6 py-3.5 text-body-regular font-semibold text-white transition-all hover:bg-primary-700 hover:scale-[1.02] sm:w-auto"
-          >
-            {t("about.button")}
-                      <ArrowRight
-                      size={16}
-                      className="rtl:-scale-x-100"
-                      aria-hidden="true"
-                    />
-          </Link>
-        </motion.div>
+        
       </div>
-    </section>
+        <div className=" mx-auto w-full max-w-120 overflow-hidden rounded-3xl bg-bg-secondary shadow-[0_8px_30px_rgba(0,0,0,0.06)] flex ">
+              
+              <img src={WeImage} alt="We" className=" hover:scale-105" />
+            
+        </div>
+        </>
   );
 }

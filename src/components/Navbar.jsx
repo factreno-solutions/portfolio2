@@ -8,6 +8,7 @@ import { Link, useLocation } from 'react-router-dom';
 export default function Navbar() {
   const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home'); // حالة لتتبع السيكشن النشط أثناء السكرول
 
   const toggleLanguage = () => {
     const newLang = i18n.language === 'ar' ? 'en' : 'ar';
@@ -16,23 +17,6 @@ export default function Navbar() {
 
   const location = useLocation();
 
-  useEffect(() => {
-    // التحقق مما إذا كان الرابط يحتوي على علامة #
-    if (location.hash) {
-      const sectionId = location.hash.replace('#', '');
-
-      // ننتظر 100 ملي ثانية حتى يتم رسم الصفحة بالكامل ثم ننزل للقسم
-      setTimeout(() => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
-    } else {
-      // إذا كان الانتقال لصفحة جديدة عادية، نصعد لأعلى الصفحة
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [location]); // يتم تشغيل هذا الكود في كل مرة يتغير فيها الرابط
   // مصفوفة الروابط
   const navLinks = [
     { name: t('nav.home'), href: '/#home' },
@@ -40,11 +24,59 @@ export default function Navbar() {
     { name: t('nav.services'), href: '/#services' },
     { name: t('nav.portfolio'), href: '/#portfolio' },
     { name: t('nav.blog'), href: '/#blog' },
-    {name:  t('nav.pageContact'),href:"/contact"},
-    {name:  t('nav.projects'),href:"/projects"},
+    { name: t('nav.pageContact'), href: '/contact' },
+    { name: t('nav.projects'), href: '/projects' },
   ];
 
-  // إعدادات حركة دخول النافبار عند فتح الموقع
+  // (1) الانتقال للسيكشن بناءً على الرابط
+  useEffect(() => {
+    if (location.hash) {
+      const sectionId = location.hash.replace('#', '');
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [location]);
+
+  // (2) مراقبة التمرير (Scroll Spy) لتحديث السيكشن النشط
+  useEffect(() => {
+    const handleScroll = () => {
+      // الأقسام الموجودة في الصفحة الرئيسية
+      const hashSections = ['home', 'about', 'services', 'portfolio', 'blog'];
+      let currentSection = '';
+
+      for (const section of hashSections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          // نعتبر السيكشن نشط إذا كان الجزء العلوي منه يلامس ثلث الشاشة العلوي
+          if (rect.top <= window.innerHeight / 3 && rect.bottom >= 100) {
+            currentSection = section;
+          }
+        }
+      }
+
+      if (currentSection) {
+        setActiveSection(currentSection);
+      }
+    };
+
+    // تشغيل مستمع التمرير فقط إذا كنا في الصفحة الرئيسية
+    if (location.pathname === '/') {
+      window.addEventListener('scroll', handleScroll);
+      handleScroll(); // استدعاء مبدئي لتحديد السيكشن النشط عند فتح الصفحة
+    }
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [location.pathname]);
+
   const navContainerVariants = {
     hidden: { y: -30, opacity: 0 },
     visible: {
@@ -74,11 +106,7 @@ export default function Navbar() {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: {
-        duration: 0.25,
-        ease: 'easeOut',
-        staggerChildren: 0.05,
-      },
+      transition: { duration: 0.25, ease: 'easeOut', staggerChildren: 0.05 },
     },
     exit: {
       opacity: 0,
@@ -104,7 +132,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between gap-2 rounded-full border border-bg-secondary bg-bg-primary px-3 py-2 shadow-sm sm:gap-0 sm:px-6 sm:py-3">
           {/* الشعار */}
           <motion.a
-            href="#home"
+            href="/#home"
             variants={itemVariants}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
@@ -116,18 +144,26 @@ export default function Navbar() {
           {/* روابط التنقل (تختفي في الشاشات الصغيرة) */}
           <div className="hidden items-center gap-6 md:flex">
             {navLinks.map((link, index) => {
-              const currentPath = location.pathname + location.hash;
-              const isActive =
-                currentPath === link.href ||
-                (currentPath === '/' && link.href === '/#home');
+              const isHashLink = link.href.startsWith('/#');
+              const hash = isHashLink ? link.href.replace('/#', '') : '';
+
+              // تحديد هل الرابط نشط أم لا
+              let isActive = false;
+              if (isHashLink) {
+                // للروابط داخل الصفحة الرئيسية (حسب السكرول)
+                isActive = location.pathname === '/' && activeSection === hash;
+              } else {
+                // للصفحات الأخرى مثل (اتصل بنا)
+                isActive = location.pathname === link.href;
+              }
 
               return (
                 <motion.div key={index} variants={itemVariants} whileHover={{ y: -2 }} whileTap={{ scale: 0.96 }}>
                   <Link
                     to={link.href}
                     onClick={() => setIsOpen(false)}
-                    className={`text-sm font-medium transition-colors hover:text-primary-500 ${
-                      isActive ? 'font-bold text-primary-500' : 'text-text-dark'
+                    className={`text-sm transition-colors hover:text-primary-500 ${
+                      isActive ? 'font-bold text-primary-500' : 'font-medium text-text-dark'
                     }`}
                   >
                     {link.name}
@@ -181,18 +217,23 @@ export default function Navbar() {
               className="mt-2 flex flex-col gap-1 overflow-hidden rounded-2xl border border-bg-secondary bg-bg-primary p-4 shadow-sm md:hidden"
             >
               {navLinks.map((link, index) => {
-                const currentPath = location.pathname + location.hash;
-                const isActive =
-                  currentPath === link.href ||
-                  (currentPath === '/' && link.href === '/#home');
+                const isHashLink = link.href.startsWith('/#');
+                const hash = isHashLink ? link.href.replace('/#', '') : '';
+
+                let isActive = false;
+                if (isHashLink) {
+                  isActive = location.pathname === '/' && activeSection === hash;
+                } else {
+                  isActive = location.pathname === link.href;
+                }
 
                 return (
                   <motion.div key={index} variants={mobileItemVariants}>
                     <Link
                       to={link.href}
                       onClick={() => setIsOpen(false)}
-                      className={`block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-primary-50 hover:text-primary-500 ${
-                        isActive ? 'font-bold text-primary-500' : 'text-text-dark'
+                      className={`block rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-primary-50 hover:text-primary-500 ${
+                        isActive ? 'font-bold text-primary-500 bg-primary-50' : 'font-medium text-text-dark'
                       }`}
                     >
                       {link.name}
