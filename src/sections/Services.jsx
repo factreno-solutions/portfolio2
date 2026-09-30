@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Globe, Smartphone, Palette, Cloud, Cpu, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const ICONS = {
   globe: <Globe size={20} strokeWidth={1.5} aria-hidden="true" />,
@@ -77,6 +78,12 @@ export default function Services() {
               </motion.div>
             ))}
         </div>
+        <Link 
+        to="/servicePage">
+        <button className="mt-12 inline-flex items-center rounded-full bg-primary-50 px-4 py-1.5 text-body-small font-semibold text-primary-500">
+          {t('services.button')}
+        </button>
+        </Link>
       </div>
     </section>
   );
