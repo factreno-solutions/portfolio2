@@ -1,7 +1,8 @@
-import { useTranslation } from 'react-i18next';
-import { Globe, Smartphone, Palette, Cloud, Cpu, Activity } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
+import { Globe, Smartphone, Palette, Cloud, Cpu, Activity } from "lucide-react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 
 const ICONS = {
   globe: <Globe size={20} strokeWidth={1.5} aria-hidden="true" />,
@@ -33,24 +34,27 @@ const cardVariants = {
 
 export default function Services() {
   const { t } = useTranslation();
-  const items = t('services.items', { returnObjects: true });
+  const items = t("services.items", { returnObjects: true });
 
   return (
-    <section id="services" className="w-full bg-bg-secondary px-4 py-16 md:py-24 overflow-hidden">
+    <section
+      id="services"
+      className="w-full bg-bg-secondary px-4 py-16 md:py-24 overflow-hidden"
+    >
       <div className="mx-auto max-w-6xl">
         {/* عنوان القسم مع تأثير الظهور عند التمرير */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center"
         >
           <span className="inline-flex items-center rounded-full bg-primary-50 px-4 py-1.5 text-body-small font-semibold text-primary-500">
-            {t('services.badge')}
+            {t("services.badge")}
           </span>
           <h2 className="mx-auto mt-4 max-w-2xl text-h2 text-primary-900">
-            {t('services.title')}
+            {t("services.title")}
           </h2>
         </motion.div>
 
@@ -78,14 +82,26 @@ export default function Services() {
               </motion.div>
             ))}
         </div>
-        <Link 
-        to="/servicePage">
-        <button className="mt-12 inline-flex items-center rounded-full bg-primary-50 px-4 py-1.5 text-body-small font-semibold text-primary-500">
-          {t('services.button')}
-        </button>
-        </Link>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-8"
+        >
+          <Link
+            to="/services"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary-500 px-6 py-3.5 text-body-regular font-semibold text-white transition-all hover:bg-primary-700 hover:scale-[1.02] sm:w-auto"
+          >
+            {t("services.button")}
+            <ArrowRight
+              size={16}
+              className="rtl:-scale-x-100"
+              aria-hidden="true"
+            />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
 }
-
