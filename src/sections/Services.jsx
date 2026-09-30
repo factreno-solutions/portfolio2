@@ -13,7 +13,6 @@ const ICONS = {
   pulse: <Activity size={20} strokeWidth={1.5} aria-hidden="true" />,
 };
 
-// إعدادات حركة دخول البطاقات عند التمرير (من اليمين واليسار بالتناوب)
 const cardVariants = {
   hidden: (index) => ({
     opacity: 0,
